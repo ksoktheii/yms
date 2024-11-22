@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Youth Management - View and Search</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f9;
+  color: #333;
+}
+
+header {
+  background-color: #6200ea;
+  color: #fff;
+  text-align: center;
+  padding: 1rem;
+}
+
+main {
+  padding: 1rem;
+}
+
+.search-section {
+  margin-bottom: 1rem;
+}
+
+.search-section label {
+  font-size: 1.2rem;
+}
+
+.search-section input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th, table td {
+  padding: 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+table thead {
+  background-color: #6200ea;
+  color: white;
+}
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Youth Management System</h1>
+    <p>Search and View Youth Details</p>
+  </header>
+  <main>
+    <section class="search-section">
+      <label for="searchBar">Search:</label>
+      <input type="text" id="searchBar" placeholder="Search by name, sub-county, or profession...">
+    </section>
+    <section class="data-section">
+      <h2>Youth List</h2>
+      <table id="youthTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Sub-County</th>
+            <th>Ward</th>
+            <th>Village</th>
+            <th>Profession</th>
+            <th>Academic Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Youth data will be dynamically inserted here -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <script>
+        // Mock data for testing
+    const youthData = [
+    { name: "John Doe", age: 25, subCounty: "Nairobi", ward: "West", village: "Kilimani", profession: "Engineer", academics: "B.Sc. in Civil Engineering" },
+    { name: "Jane Smith", age: 22, subCounty: "Mombasa", ward: "South", village: "Likoni", profession: "Teacher", academics: "Diploma in Education" },
+    { name: "Samuel Kip", age: 28, subCounty: "Eldoret", ward: "East", village: "Kapsoya", profession: "Farmer", academics: "Certificate in Agriculture" },
+    ];
+
+    // Populate the table with data
+    function populateTable(data) {
+    const tableBody = document.querySelector("#youthTable tbody");
+    tableBody.innerHTML = ""; // Clear previous content
+    data.forEach(youth => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+        <td>${youth.name}</td>
+        <td>${youth.age}</td>
+        <td>${youth.subCounty}</td>
+        <td>${youth.ward}</td>
+        <td>${youth.village}</td>
+        <td>${youth.profession}</td>
+        <td>${youth.academics}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+    }
+
+    // Filter function
+    function filterYouthList(query) {
+    const filteredData = youthData.filter(youth => 
+        youth.name.toLowerCase().includes(query) ||
+        youth.subCounty.toLowerCase().includes(query) ||
+        youth.profession.toLowerCase().includes(query)
+    );
+    populateTable(filteredData);
+    }
+
+    // Event listener for search bar
+    document.getElementById("searchBar").addEventListener("input", function () {
+    const query = this.value.toLowerCase();
+    filterYouthList(query);
+    });
+    // Initial population of the table
+    populateTable(youthData);
+
+  </script>
+</body>
+</html>
