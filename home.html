@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Youth Management System</title>
   <link rel="stylesheet" href="home.css">
-  
 </head>
 <body>
   <header>
@@ -14,7 +13,7 @@
   <main>
     <section class="form-section">
       <h2>Enter your details</h2>
-      <form id="youthForm">
+      <form id="youthForm" enctype="multipart/form-data" >
         <label for="firstName">First Name:</label>
         <input type="text" id="firstName" name="firstName" required>
 
@@ -40,13 +39,26 @@
         <input type="text" id="profession" name="profession">
         
         <label for="academics">Academic Details:</label>
-        <textarea id="academics" name="academics"></textarea>
+        <span>
+          <h5>Upload kcpe results slip:</h5>
+          <input type="file" name="kcpe-results-slip" id="kcpe-results-slip">
+          <h5>Upload kcse results slip:</h5>
+          <input type="file" name="kcse-results-slip" id="kcse-results-slip">
+          <h5>Upload college/university official transcripts:</h5>
+          <input type="file" name="College-university-transcripts" id="College-university-transcripts" >
+        </span>
+
+        <label for="cv">Upload your CV:</label>
+        <input type="file" name="cv" id="cv">
         
         <button type="submit">Submit Details</button>
       </form>
     </section>
     <section class="data-section">
-      <h2>Youth List</h2>
+      <div class="data-section-heading">
+        <h2>Your Details</h2>
+        <button class="changeDetails">Change Details</button>
+      </div>
       <table id="youthTable">
         <thead>
           <tr>
@@ -59,6 +71,7 @@
             <th>Village</th>
             <th>Profession</th>
             <th>Academic Details</th>
+            <th>Cv</th>
           </tr>
         </thead>
         <tbody></tbody>
