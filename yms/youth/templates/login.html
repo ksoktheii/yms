@@ -43,7 +43,7 @@
                     {% csrf_token %}
                     
                     <div class="form-group">
-                        <label for="username">Username</label>
+                        <label for="username">Email Address</label>
                         <input type="text" class="form-control" name="username" id="username" aria-describedby="emailHelp" placeholder="Enter username" required>
                     </div>
                     
@@ -54,6 +54,9 @@
                     
                     <button type="submit" class="btn btn-primary btn-block">Login</button>
                 </form>
+                <div class="text-center mt-3">
+                    <p>Not registered? <a href="{% url 'user_sign' %}" class="btn btn-link">Register here</a></p>
+                </div>
             </div>
         </div>
     </div>
@@ -70,6 +73,11 @@
             font-size: 2.5rem;
             color: #333;
             margin-top: 20px;
+        }
+        .btn-link {
+            font-size: 1rem;
+            color: #007bff;
+            text-decoration: none;
         }
 
         p.lead {
