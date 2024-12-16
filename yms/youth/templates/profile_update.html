@@ -1,47 +1,103 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-    <div class="container">
-        {% comment %} Content here for the user profile update editing {% endcomment %}
-    </div>
+    <div class="container-fluid">
+        <div class="row">
 
-    <!-- Modal Popup for Profile Update -->
-    {% if user.is_authenticated %}
-        <!-- Button to trigger the modal (this is optional, it's just an example) -->
-        <button type="button" class="btn btn-primary" id="profileModalButton" style="display:none;">Update Profile</button>
-
-        <!-- Modal -->
-        <div class="modal fade" id="profileUpdateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Update Your Profile</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Click the button below to update your profile.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="{% url 'profile-update' %}" class="btn btn-primary">Update Profile</a>
-                    </div>
+            <!-- Sidebar -->
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'user_dashboard' %}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{% url 'profile-update' %}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+                                    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                                    <polyline points="13 2 13 9 20 9"></polyline>
+                                </svg>
+                                User Profile
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-            </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Update Profile</h1>
+                </div>
+
+                <!-- Profile Update Form -->
+                <div class="container">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Username -->
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" name="username" id="username" value="{{ user.username }}" required>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" name="email" id="email" value="{{ user.email }}" required>
+                        </div>
+
+                        <!-- Profile Picture -->
+                        <div class="form-group">
+                            <label for="profile_picture">Profile Picture</label>
+                            <input type="file" class="form-control" name="profile_picture" id="profile_picture">
+                            {% if user.profile.profile_picture %}
+                                <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" style="max-width: 100px; margin-top: 10px;">
+                            {% endif %}
+                        </div>
+
+                        <!-- Educational Background -->
+                        <div class="form-group">
+                            <label for="education_background">Educational Background</label>
+                            <textarea class="form-control" name="education_background" id="education_background" rows="3">{{ user.profile.education_background }}</textarea>
+                        </div>
+
+                        <!-- Grade Attained -->
+                        <div class="form-group">
+                            <label for="grade_attained">Grade Attained</label>
+                            <input type="text" class="form-control" name="grade_attained" id="grade_attained" value="{{ user.profile.grade_attained }}">
+                        </div>
+
+                        <!-- University Attended -->
+                        <div class="form-group">
+                            <label for="university_attended">University Attended</label>
+                            <input type="text" class="form-control" name="university_attended" id="university_attended" value="{{ user.profile.university_attended }}">
+                        </div>
+
+                        <!-- Course Pursued -->
+                        <div class="form-group">
+                            <label for="course_pursued">Course Pursued</label>
+                            <input type="text" class="form-control" name="course_pursued" id="course_pursued" value="{{ user.profile.course_pursued }}">
+                        </div>
+
+                        <!-- Password Change -->
+                        <div class="form-group">
+                            <label for="password">Change Password</label>
+                            <input type="password" class="form-control" name="password" id="password" placeholder="Enter new password (optional)">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Update Profile</button>
+                    </form>
+                </div>
+
+            </main>
         </div>
-    {% endif %}
-
-    <!-- Inline JavaScript to Show the Modal Popup when Logged In -->
-    <script>
-        // Check if the user is logged in and show the modal
-        {% if user.is_authenticated %}
-            // Show the modal when the page is loaded
-            window.onload = function() {
-                $('#profileUpdateModal').modal('show');
-            };
-        {% endif %}
-    </script>
-
-    <!-- Bootstrap JS and jQuery (for modal functionality) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    </div>
 {% endblock %}
