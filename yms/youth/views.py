@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.forms import UserChangeForm
-from django.contrib.auth import update_session_auth_hash
-from .forms import ProfileForm
+from .forms import ProfileUpdateForm, UserUpdateForm 
 from .models import Profile
 from django.contrib.auth.decorators import login_required
 
@@ -42,27 +40,27 @@ def profile(request):
     user_profile = request.user.profile  # Get the user's profile
     return render(request, 'profile.html', {'user_profile': user_profile})
 
+@login_required
 def profile_update(request):
-    user_profile = request.user.profile  # Assuming the user has a profile
-    
+    user = request.user
+    try:
+        profile = user.profile
+    except Profile.DoesNotExist:
+        profile = None
+
     if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES, instance=user_profile)
-        if form.is_valid():
-            # Save profile updates
-            form.save()
-            # Handle password change if provided
-            password = form.cleaned_data.get('password')
-            if password:
-                user = request.user
-                user.set_password(password)
-                user.save()
-                update_session_auth_hash(request, user)  # Keep user logged in after password change
+        user_form = UserUpdateForm(request.POST, instance=user)
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=profile)
 
-            return redirect('profile-display')  # Redirect after successful update
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()  # Update user details
+            profile_form.save()  # Update profile details
+            return redirect('profile-display')  # Redirect to the profile page to display updated info
     else:
-        form = ProfileForm(instance=user_profile)
+        user_form = UserUpdateForm(instance=user)
+        profile_form = ProfileUpdateForm(instance=profile)
 
-    return render(request, 'profile_update.html', {'form': form})
+    return render(request, 'profile_update.html', {'user_form': user_form, 'profile_form': profile_form})
 
 def sign_in(request):
     msg = []

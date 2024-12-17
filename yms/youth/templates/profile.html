@@ -1,40 +1,27 @@
 {% extends 'base.html' %}
-{% load static %}
 
 {% block content %}
 <div class="container">
-    <div class="row mt-5">
-        <div class="col-md-8 offset-md-2">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1>Profile Details</h1>
             <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h3>User Profile</h3>
-                </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-4">
-                            {% if user_profile.profile_picture %}
-                                <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" class="img-thumbnail" style="width: 150px; height: 150px;">
-                            {% else %}
-                                <img src="{% static 'default-avatar.jpg' %}" alt="Default Profile Picture" class="img-thumbnail" style="width: 150px; height: 150px;">
-                            {% endif %}
-                        </div>
-                        <div class="col-md-8">
-                            <h4>Educational Background</h4>
-                            <p>{{ user_profile.education }}</p>
+                    <h5 class="card-title">{{ user.username }}</h5>
+                    <p>Email: {{ user.email }}</p>
 
-                            <h4>University Attended</h4>
-                            <p>{{ user_profile.university }}</p>
+                    {% if user.profile.profile_picture %}
+                        <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" width="100">
+                    {% else %}
+                        <p>No Profile Picture</p>
+                    {% endif %}
 
-                            <h4>Course Pursued</h4>
-                            <p>{{ user_profile.course }}</p>
+                    <p>Education Background: {{ user.profile.education_background }}</p>
+                    <p>Grade Attained: {{ user.profile.grade_attained }}</p>
+                    <p>University Attended: {{ user.profile.university_attended }}</p>
+                    <p>Course Pursued: {{ user.profile.course_pursued }}</p>
 
-                            <h4>Grade Attained</h4>
-                            <p>{{ user_profile.grade }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <a href="{% url 'profile-update' %}" class="btn btn-warning">Edit Profile</a>
+                    <a href="{% url 'profile-update' %}" class="btn btn-primary">Update Profile</a>
                 </div>
             </div>
         </div>
